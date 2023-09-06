@@ -1,0 +1,13 @@
+.header__logo {
+  display: block;
+}
+
+@media screen and (max-width: 900px) {
+  .header__logo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-width: calc(100% - 60px);
+    margin: 0 auto;
+  }
+}
