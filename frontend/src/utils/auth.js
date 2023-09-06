@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3001'
+const BASE_URL = 'http://api.mesto.tasyushka.nomoredomainsicu.ru/'
 
 export const register = ( password, email) => {
     return fetch(`${BASE_URL}/signup`, {
