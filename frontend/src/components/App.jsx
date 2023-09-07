@@ -138,6 +138,7 @@ function App() {
   }
 
   useEffect(() => {
+    if (loggedIn) {
     handleTokenCheck();
     // const token = localStorage.getItem('token');
     Promise.all([api.getUserInfo(token), api.getListCards(token)])
@@ -146,7 +147,8 @@ function App() {
         setCards(cardsDate)
       })
       .catch(err => console.log(`Ошибка при получении данных с сервера: ${err}`))
-  }, [])
+    }
+  }, [loggedIn])
 
   return (
 
