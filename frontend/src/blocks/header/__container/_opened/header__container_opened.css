@@ -1,0 +1,9 @@
+.header__container_opened {
+  display: flex;
+}
+
+@media screen and (max-width: 900px) {
+  .header__container_opened {
+    display: flex;
+  }  
+}
