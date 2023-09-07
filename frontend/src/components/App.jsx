@@ -34,8 +34,6 @@ function App() {
 
   const navigate = useNavigate()
 
-  const token = localStorage.getItem('token');
-
   //открытие попапа
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true)
@@ -63,8 +61,10 @@ function App() {
 
   function handleUserEmail(email) {
     setUserEmail(email);
-    setloggedIn(true);
+    // setloggedIn(true);
   }
+
+ 
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -72,13 +72,13 @@ function App() {
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     if (!isLiked) {
-      api.putLikes(card._id, token)
+      api.putLikes(card._id, localStorage.jwt)
         .then((newCard) => {
           setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
         })
         .catch(err => console.log(`Ошибка при проставлении лайка: ${err}`))
     } else {
-      api.deleteLikes(card._id, token)
+      api.deleteLikes(card._id, localStorage.jwt)
         .then((newCard) => {
           setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
         })
@@ -87,7 +87,7 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    api.deleteCard(card._id, token)
+    api.deleteCard(card._id, localStorage.jwt)
       .then(() => {
         setCards((cards) => cards.filter((deleteCardId) => card._id !== deleteCardId._id));
       })
@@ -95,7 +95,7 @@ function App() {
   }
 
   function handleUpdateUser(data) {
-    api.getProfileInfo(data, token)
+    api.getProfileInfo(data, localStorage.jwt)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -104,7 +104,7 @@ function App() {
   }
 
   function handleUpdateAvatar(data) {
-    api.getProfileAvatar(data, token)
+    api.getProfileAvatar(data, localStorage.jwt)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -113,7 +113,7 @@ function App() {
   }
 
   function handleAddPlaceSubmit(data) {
-    api.addNewCard(data, token)
+    api.addNewCard(data, localStorage.jwt)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -121,14 +121,30 @@ function App() {
       .catch(err => console.log(`Ошибка при добавлении карточки: ${err}`))
   }
 
+  useEffect(() => {
+    if (localStorage.jwt) {
+      api.getUserInfo(localStorage.jwt)
+      .then(res => {
+        setUserEmail(res.email)
+        setloggedIn(true)
+        setUserToken(false)
+      })
+      .catch(err => console.error(`Ошибка повторного входа: ${err}`))
+    } else {
+      setloggedIn(false)
+      setUserToken(false)
+    }
+  }, [])
+
   function handleTokenCheck() {
     if (localStorage.getItem('token')) {
-      // const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
       setUserToken(token)
       auth.checkToken(token)
         .then((res) => {
           if (res) {
-            handleUserEmail(res.email)
+            setUserEmail(res.email);
+            // handleUserEmail(res.email)
             // setloggedIn(true);
             navigate("/", { replace: true })
           }
@@ -139,9 +155,10 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-    handleTokenCheck();
+    // handleTokenCheck();
+    console.log(localStorage.jwt)
     // const token = localStorage.getItem('token');
-    Promise.all([api.getUserInfo(token), api.getListCards(token)])
+    Promise.all([api.getUserInfo(localStorage.jwt), api.getListCards(localStorage.jwt)])
       .then(([profileData, cardsDate]) => {
         setCurrentUser(profileData)
         setCards(cardsDate)
