@@ -50,7 +50,7 @@ export default function Register () {
         e.preventDefault();
         auth.register(values.password, values.email)
         .then((res) => {
-            if (res.data._id) {
+            if (res._id) {
               handleInfoPopup()
             }             
         }) 

@@ -6,7 +6,7 @@ class Api {
     }
 
     _checkError (res) {
-      return res.ok ? res.json() : Promise.reject
+      return res.ok ? res.json() : Promise.reject()
     }
 
     getUserInfo(token) {
