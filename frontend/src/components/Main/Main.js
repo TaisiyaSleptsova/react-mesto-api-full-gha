@@ -14,6 +14,8 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardCl
       linkTo="/sign-in"
       token={token}
       email={email}
+      cards={cards}
+      currentUser={currentUser}
     >
       <p className="header__email">{email}</p>  
     </Header>

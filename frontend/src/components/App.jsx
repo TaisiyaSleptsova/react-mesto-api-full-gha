@@ -144,7 +144,8 @@ function App() {
         .then((res) => {
           if (res) {
             setUserEmail(res.email);
-            // handleUserEmail(res.email)
+            handleUserEmail(res.email)
+
             // setloggedIn(true);
             navigate("/", { replace: true })
           }
@@ -155,8 +156,9 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-    // handleTokenCheck();
+    handleTokenCheck();
     console.log(localStorage.jwt)
+    // setloggedIn(true);
     // const token = localStorage.getItem('token');
     Promise.all([api.getUserInfo(localStorage.jwt), api.getListCards(localStorage.jwt)])
       .then(([profileData, cardsDate]) => {
