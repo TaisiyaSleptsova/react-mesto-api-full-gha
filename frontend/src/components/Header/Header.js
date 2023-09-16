@@ -1,14 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 
-export default function Header({ linkName, linkTo, children, cards, currentUser }) {
+export default function Header({ linkName, linkTo, children, setCurrentUser, handleLoggedIn }) {
   const history = useNavigate();
 
   function signOut() {
     localStorage.removeItem('jwt');
     history('/sign-in');
-    cards=([]);
-    currentUser=({});
+    handleLoggedIn();
+    // onLoggedIn();
+    // cards=([]);
+    setCurrentUser=({});
   }
 
   return (

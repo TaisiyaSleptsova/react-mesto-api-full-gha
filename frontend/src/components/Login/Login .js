@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import useForm from "../../hooks/useForm";
 import FormBlackTheme from "../FormBlackTheme/FormBlackTheme";
-import Header from "../Header/Header";
+// import Header from "../Header/Header";
 import * as auth from '../../utils/auth.js';
 import { useNavigate } from "react-router-dom";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import popupImageRed from "../../images/stop-login.svg"
 
-export default function Login ({ handleLogin } ) {
+export default function Login ({ handleLogin, handleLoggedIn } ) {
     const {values, handleChange, setValues} = useForm(
         {
           email: "",
@@ -43,8 +43,9 @@ export default function Login ({ handleLogin } ) {
             if (data.token) {
               localStorage.setItem('jwt', data.token);
               setValues({email: '', password: ''});
-              handleLogin(email);
+              handleLogin(email);              
               navigate ('/', {replace:true});
+              handleLoggedIn();
             } 
           })
           .catch(err => {console.log(err)

@@ -3,11 +3,13 @@ import Card from "../Card/Card";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
+import { Navigate } from "react-router-dom";
 
-export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete, email, token }) {
+export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete, loggedIn, handleLoggedIn, email, token }) {
   const currentUser = useContext(CurrentUserContext)
 
   return (
+    loggedIn ? 
     <>
     <Header
       linkName='Выход'
@@ -16,6 +18,9 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardCl
       email={email}
       cards={cards}
       currentUser={currentUser}
+      loggedIn={loggedIn}
+      // setLoggedIn={setLoggedIn}
+      handleLoggedIn={handleLoggedIn}
     >
       <p className="header__email">{email}</p>  
     </Header>
@@ -65,5 +70,6 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardCl
     </main>
     <Footer/>
     </>
+    : <Navigate to={'/sing-in'} replace />
   )
 }

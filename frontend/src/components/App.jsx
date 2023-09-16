@@ -1,7 +1,7 @@
 import ImagePopup from "./ImagePopup/ImagePopup";
 import Main from "./Main/Main";
 import PopupWithForm from "./PopupWithForm/PopupWithForm";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import api from "../utils/api";
@@ -25,6 +25,8 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
 
   const [cards, setCards] = useState([])
+
+  // const [userData, setUserData] = useState([])
 
   const [loggedIn, setloggedIn] = useState(false)
 
@@ -61,10 +63,11 @@ function App() {
 
   function handleUserEmail(email) {
     setUserEmail(email);
-    // setloggedIn(true);
   }
 
- 
+  function handleInLoggedin () {
+    setloggedIn(true)
+  }
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -121,53 +124,60 @@ function App() {
       .catch(err => console.log(`Ошибка при добавлении карточки: ${err}`))
   }
 
-  useEffect(() => {
-    if (localStorage.jwt) {
-      api.getUserInfo(localStorage.jwt)
-      .then(res => {
-        setUserEmail(res.email)
-        setloggedIn(true)
-        setUserToken(false)
+ function handleTokenCheck() {
+  if (localStorage.getItem('jwt')) {
+    // const token = localStorage.getItem('jwt');
+      // setUserToken(localStorage.jwt);
+    auth.checkToken(localStorage.jwt)
+      .then((res) => {
+        // if (res) {
+          // const { _id, email } = res;
+          const userData = {res};
+          setCurrentUser(userData);
+          setUserEmail(res.email);
+          handleUserEmail(res.email)
+          setloggedIn(true);
+          navigate("/", { replace: true })
+          // getUserData()
+        // }
       })
-      .catch(err => console.error(`Ошибка повторного входа: ${err}`))
-    } else {
-      setloggedIn(false)
-      setUserToken(false)
-    }
-  }, [])
+      .catch(err => console.log(`Ошибка при получении токена: ${err}`))
 
-  function handleTokenCheck() {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-      setUserToken(token)
-      auth.checkToken(token)
-        .then((res) => {
-          if (res) {
-            setUserEmail(res.email);
-            handleUserEmail(res.email)
-
-            // setloggedIn(true);
-            navigate("/", { replace: true })
-          }
-        })
-        .catch(err => console.log(`Ошибка при получении токена: ${err}`))
-    }
-  }
+}}
 
   useEffect(() => {
     if (loggedIn) {
-    handleTokenCheck();
-    console.log(localStorage.jwt)
-    // setloggedIn(true);
-    // const token = localStorage.getItem('token');
-    Promise.all([api.getUserInfo(localStorage.jwt), api.getListCards(localStorage.jwt)])
-      .then(([profileData, cardsDate]) => {
-        setCurrentUser(profileData)
-        setCards(cardsDate)
-      })
-      .catch(err => console.log(`Ошибка при получении данных с сервера: ${err}`))
+      handleTokenCheck();
+      // setloggedIn(true);
+      // const token = localStorage.getItem('token');
+      Promise.all([api.getUserInfo(localStorage.jwt), api.getListCards(localStorage.jwt)])
+        .then(([profileData, cardsDate]) => {
+          setCurrentUser(profileData)
+          setCards(cardsDate)
+          setUserEmail(profileData.email)
+        })
+        .catch(err => console.log(`Ошибка при получении данных с сервера: ${err}`))
     }
   }, [loggedIn])
+
+  // useEffect(() => {
+  //   function getUserData() {
+  //   console.log(localStorage.jwt)
+  //   if (localStorage.jwt) {
+  //     api.getUserInfo(localStorage.jwt)
+  //     .then(res => {
+  //       console.log(res)
+  //       setUserEmail(res.email)
+  //       // setloggedIn(true)
+  //       // setUserToken('')
+  //     })
+  //     .catch(err => console.error(`Ошибка повторного входа: ${err}`))
+  //   } else {
+  //     setloggedIn(false)
+  //     setUserToken('')
+  //   }
+  // }
+  // , [])
 
   return (
 
@@ -188,8 +198,11 @@ function App() {
                 onCardLike={handleCardLike}
                 onCardDelete={handleCardDelete}
                 loggedIn={loggedIn}
+                handleLoggedIn={handleInLoggedin}
+                // setloggedIn={setloggedIn}
                 email={userEmail}
                 token={userToken}
+                // onLoggedIn={handleInLoggedin}
               />
             }
           />
@@ -200,6 +213,8 @@ function App() {
                 <Header
                   linkName='Войти'
                   linkTo="/sign-in"
+                  setCurrentUser={setCurrentUser}
+                  handleLoggedIn={handleInLoggedin}
                 />
                 <Register/>
               </>
@@ -212,9 +227,12 @@ function App() {
                 <Header
                   linkName='Регистрация'
                   linkTo="/sign-up"
+                  handleLoggedIn={handleInLoggedin}
                 />
                 <Login
                   handleLogin={handleUserEmail}
+                  handleLoggedIn={handleInLoggedin}
+                  // setloggedIn={setloggedIn}
                 />
               </>
             }
