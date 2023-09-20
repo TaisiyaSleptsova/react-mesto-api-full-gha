@@ -1,7 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 
-export default function Header({ linkName, linkTo, children, setCurrentUser, handleLoggedIn }) {
+export default function Header({ linkName, linkTo, children, onCurrentUser, handleLoggedIn }) {
   const history = useNavigate();
 
   function signOut() {
@@ -10,7 +10,7 @@ export default function Header({ linkName, linkTo, children, setCurrentUser, han
     handleLoggedIn();
     // onLoggedIn();
     // cards=([]);
-    setCurrentUser=({});
+    onCurrentUser();
   }
 
   return (
@@ -25,7 +25,7 @@ export default function Header({ linkName, linkTo, children, setCurrentUser, han
       </div>
       <div className="header__container header__container_opened">
         {children}
-        <Link to={linkTo} onClick={signOut} className="header__link">{linkName}</Link>
+        <NavLink to={linkTo} onClick={signOut} className="header__link">{linkName}</NavLink>
       </div>
     </header>
   )

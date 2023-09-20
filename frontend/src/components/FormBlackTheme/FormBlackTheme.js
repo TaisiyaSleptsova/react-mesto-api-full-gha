@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 
 export default function FormBlackTheme ({ title, buttonName, children, handleSubmit, email, password, handleChange }) {
   
@@ -27,6 +28,7 @@ export default function FormBlackTheme ({ title, buttonName, children, handleSub
             />
             <div className="register__button-container">
               <button type="submit" className="register__link">{buttonName}</button>
+              {/* <NavLink type="submit" className="register__link">{buttonName}</NavLink> */}
             </div>
           </form>
           {children}

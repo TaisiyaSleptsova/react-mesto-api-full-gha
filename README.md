@@ -9,8 +9,8 @@
 
 ## Ссылки на проект
 
-IP-адрес 158.160.45.51
+IP 62.84.126.7
 
-Frontend https://...
+Frontend https://mesto.tasyushka.nomoredomainsicu.ru
 
-Backend https://...
+Backend https://api.mesto.tasyushka.nomoredomainsicu.ru

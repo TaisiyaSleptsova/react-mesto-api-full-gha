@@ -5,7 +5,7 @@ import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import { Navigate } from "react-router-dom";
 
-export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete, loggedIn, handleLoggedIn, email, token }) {
+export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete, loggedIn, handleLoggedIn, email, token, onCurrentUser }) {
   const currentUser = useContext(CurrentUserContext)
 
   return (
@@ -16,11 +16,12 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardCl
       linkTo="/sign-in"
       token={token}
       email={email}
-      cards={cards}
-      currentUser={currentUser}
+      // cards={cards}
+      // currentUser={currentUser}
       loggedIn={loggedIn}
       // setLoggedIn={setLoggedIn}
       handleLoggedIn={handleLoggedIn}
+      onCurrentUser={onCurrentUser}
     >
       <p className="header__email">{email}</p>  
     </Header>

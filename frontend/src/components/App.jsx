@@ -66,7 +66,15 @@ function App() {
   }
 
   function handleInLoggedin () {
+    setloggedIn(false)
+  }
+
+  function handleLoggedin () {
     setloggedIn(true)
+  }
+
+  function handleCurrentUser () {
+    setCurrentUser({})
   }
 
   function handleCardLike(card) {
@@ -125,19 +133,19 @@ function App() {
   }
 
  function handleTokenCheck() {
-  if (localStorage.getItem('jwt')) {
+  if (localStorage.jwt) {
     // const token = localStorage.getItem('jwt');
       // setUserToken(localStorage.jwt);
     auth.checkToken(localStorage.jwt)
       .then((res) => {
         // if (res) {
           // const { _id, email } = res;
-          const userData = {res};
-          setCurrentUser(userData);
+          // const userData = {res};
+          setCurrentUser(res);
           setUserEmail(res.email);
           handleUserEmail(res.email)
-          setloggedIn(true);
-          navigate("/", { replace: true })
+          // setloggedIn(true);
+          // navigate("/", { replace: true })
           // getUserData()
         // }
       })
@@ -155,6 +163,7 @@ function App() {
           setCurrentUser(profileData)
           setCards(cardsDate)
           setUserEmail(profileData.email)
+          // setUserToken('')
         })
         .catch(err => console.log(`Ошибка при получении данных с сервера: ${err}`))
     }
@@ -203,6 +212,8 @@ function App() {
                 email={userEmail}
                 token={userToken}
                 // onLoggedIn={handleInLoggedin}
+                // setCurrentUser={setCurrentUser}
+                onCurrentUser={handleCurrentUser}
               />
             }
           />
@@ -231,7 +242,7 @@ function App() {
                 />
                 <Login
                   handleLogin={handleUserEmail}
-                  handleLoggedIn={handleInLoggedin}
+                  handleLoggedIn={handleLoggedin}
                   // setloggedIn={setloggedIn}
                 />
               </>
